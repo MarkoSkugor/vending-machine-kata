@@ -6,7 +6,7 @@ describe('myApp.vendingmachine module', function() {
 
   describe('vendingMachineController', function(){
 
-    it('should ....', inject(function($controller) {
+    it('should be defined', inject(function($controller) {
       //spec body
       var vendingMachineController = $controller('vendingMachineController');
       expect(vendingMachineController).toBeDefined();
