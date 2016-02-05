@@ -15,20 +15,17 @@
 		</div>
         <md-divider></md-divider>
         <div flex layout="row" layout-align="start stretch">
-			<div flex="40">
-				<md-radio-group>
-			      	<md-radio-button value="Quarter" class="md-secondary">Quarter</md-radio-button>
-			      	<md-radio-button value="Dime" class="md-secondary">Dime </md-radio-button>
-			      	<md-radio-button value="Nickel" class="md-secondary">Nickel</md-radio-button>
-			     	<md-radio-button value="Penny" class="md-secondary">Penny</md-radio-button>
-			    </md-radio-group>
-			    <md-button-group layout="column">
-					<md-button class="md-button md-raised md-secondary">Insert Coin</md-button>
-					<md-button class="md-button md-raised md-secondary">Return Coins</md-button>
-			    </md-button-group>
+			<div flex="60" layout-padding>
+				    <div layout="column">
+						<md-button class="md-raised md-secondary">Insert Quarter</md-button>
+						<md-button class="md-raised md-secondary">Insert Dime</md-button>
+						<md-button class="md-raised md-secondary">Insert Nickel</md-button>
+						<md-button class="md-raised md-secondary">Insert Penny</md-button>
+						<md-button class="md-primary">Return Coins</md-button>
+				    </div>
 			</div>
-			<div flex="60" layout="column" layout-padding layout-align="end stretch">
-        		<div flex layout layout-align="center center">collect snacks below</div>
+			<div flex="40" layout="column" layout-padding layout-align="end stretch">
+        		<div flex layout layout-align="center center">&darr;snacks&darr;</div>
         		<md-divider></md-divider>
 				<div layout="column" layout-align="center center">
 					<img flex style="max-width: 100px;" class="md-media-sm animated bounce-in-down" src="images/cola.gif">
@@ -37,12 +34,14 @@
 		</div>
         <md-divider></md-divider>
         <div layout="row" layout-align="start end">
-		    <md-button-group flex="40" layout="column">
+		    <div flex="40" layout="column" layout-padding>
 				<div flex layout-padding>
 	        		<div flex>Coin Return</div>
 	        	</div>
-				<md-button class="md-button md-raised md-secondary">Clear</md-button>
-		    </md-button-group>
+	        	<div layout="column">
+					<md-button class="md-raised md-secondary">Clear</md-button>
+				</div>
+		    </div>
 			<div flex="60" layout="column" layout-padding>
 	        	<div flex>Quarters: 0 </br>Dimes: 0 </br>Nickels: 0 </br>Pennies: 0</div>
 	        </div>
