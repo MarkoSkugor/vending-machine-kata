@@ -17,7 +17,6 @@ services.factory('VendingMachineService', ['$rootScope', function($rootScope){
 				price : .65,
 				quantity : 3
 			}
-
 		],
 		needsExactChange : true,
 		insertCoin : function(coin){
@@ -27,9 +26,14 @@ services.factory('VendingMachineService', ['$rootScope', function($rootScope){
 
 		},
 		returnCoins : function(){
-
+			var coins = angular.copy(this.coins);
+			this.coins = [];
+			return coins;
 		},
 		determineCoinType : function(coin){
+
+		},
+		getCoinsTotalValue : function(){
 
 		}
 	};
