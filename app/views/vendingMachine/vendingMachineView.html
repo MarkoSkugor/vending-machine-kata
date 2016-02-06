@@ -2,26 +2,30 @@
 	<md-card flex>
         <md-card-title>
           <md-card-title-text flex layout-align="center center">
-            <span class="md-headline">INSERT COIN</span>
+            <span class="md-headline">{{screenMessage}}</span>
           </md-card-title-text>
         </md-card-title>
         <md-divider></md-divider>
         <div flex layout="row">
 			<div flex>
-				<md-button class="md-button md-raised md-primary">Cola $1.00</md-button>
-				<md-button class="md-button md-raised md-primary">Chips $0.50</md-button>
-				<md-button class="md-button md-raised md-primary">Candy $0.65</md-button>
+				<md-button class="md-button md-raised md-primary" ng-click="selectSnack('cola')">Cola $1.00</md-button>
+				<md-button class="md-button md-raised md-primary" ng-click="selectSnack('chips')">Chips $0.50</md-button>
+				<md-button class="md-button md-raised md-primary" ng-click="selectSnack('candy')">Candy $0.65</md-button>
 			</div>
 		</div>
         <md-divider></md-divider>
         <div flex layout="row" layout-align="start stretch">
 			<div flex="60" layout-padding>
 				    <div layout="column">
-						<md-button class="md-raised md-secondary">Insert Quarter</md-button>
-						<md-button class="md-raised md-secondary">Insert Dime</md-button>
-						<md-button class="md-raised md-secondary">Insert Nickel</md-button>
-						<md-button class="md-raised md-secondary">Insert Penny</md-button>
-						<md-button class="md-primary">Return Coins</md-button>
+						<md-button class="md-raised md-secondary" 
+							ng-click="insertCoin({'diameter' : .955, 'weight' : 5.670})">Insert Quarter</md-button>
+						<md-button class="md-raised md-secondary" 
+							ng-click="insertCoin({'diameter' : .705, 'weight' : 2.268})">Insert Dime</md-button>
+						<md-button class="md-raised md-secondary" 
+							ng-click="insertCoin({'diameter' : .835, 'weight' : 5.000})">Insert Nickel</md-button>
+						<md-button class="md-raised md-secondary" 
+							ng-click="insertCoin({'diameter' : .750, 'weight' : 2.500})">Insert Penny</md-button>
+						<md-button class="md-primary" ng-click="returnCoins()">Return Coins</md-button>
 				    </div>
 			</div>
 			<div flex="40" layout="column" layout-padding layout-align="end stretch">
@@ -39,11 +43,16 @@
 	        		<div flex>Coin Return</div>
 	        	</div>
 	        	<div layout="column">
-					<md-button class="md-raised md-secondary">Clear</md-button>
+					<md-button class="md-raised md-secondary" ng-click="clearCoinReturn()">Clear</md-button>
 				</div>
 		    </div>
 			<div flex="60" layout="column" layout-padding>
-	        	<div flex>Quarters: 0 </br>Dimes: 0 </br>Nickels: 0 </br>Pennies: 0</div>
+	        	<div flex>
+	        		Quarters: {{coinReturn.quarters}}</br>
+	        		Dimes: {{coinReturn.dimes}}</br>
+	        		Nickels: {{coinReturn.nickels}}</br>
+	        		Pennies: {{coinReturn.pennies}}
+	        	</div>
 	        </div>
    		</div>
 	</md-card>

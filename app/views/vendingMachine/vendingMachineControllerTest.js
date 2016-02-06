@@ -2,15 +2,19 @@
 
 describe('myApp.vendingmachine module', function() {
 
-  beforeEach(module('myApp.vendingmachine'));
+	var vendingMachineController;
+	var mockVendingMachineService = {};
 
-  describe('vendingMachineController', function(){
+  	beforeEach(module('myApp.vendingmachine'));
+  	beforeEach(inject(function($controller){
+  		vendingMachineController = $controller('vendingMachineController', {$scope: {}, VendingMachineService : mockVendingMachineService});
+  	}));
 
-    it('should be defined', inject(function($controller) {
-      //spec body
-      var vendingMachineController = $controller('vendingMachineController');
-      expect(vendingMachineController).toBeDefined();
-    }));
+  	describe('vendingMachineController', function(){
 
-  });
+	    it('should be defined', function(){
+	      	expect(vendingMachineController).toBeDefined();
+	    });
+
+  	});
 });

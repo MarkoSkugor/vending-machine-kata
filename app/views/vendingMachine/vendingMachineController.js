@@ -7,6 +7,24 @@ angular.module('myApp.vendingmachine', ['ngRoute'])
   });
 }])
 
-.controller('vendingMachineController', [function() {
-	//TODO: make the controller do stuff
+.controller('vendingMachineController', ['$scope', 'VendingMachineService', function($scope, VendingMachineService) {
+	$scope.screenMessage = 'EXACT CHANGE ONLY';
+	$scope.coinReturn = {
+		quarters : 0,
+		dimes : 0,
+		nickels : 0,
+		pennies : 0
+	};
+
+	$scope.insertCoin = function(coin){
+
+	};
+
+	$scope.clearCoinReturn = function(){
+
+	};
+
+	$scope.returnCoins = function(){
+
+	};
 }]);
