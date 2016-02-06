@@ -6,6 +6,11 @@ describe('VendingMachineService', function() {
 	var dime = {diameter: .705, weight: 2.268};
 	var nickel = {diameter: .835, weight: 5.000};
 	var penny = {diameter: .750, weight: 2.500};
+	var emptyCoinsObject = {
+			quarters : 0,
+			dimes : 0,
+			nickels : 0
+		};
 
   	beforeEach(module('services'));
 
@@ -13,9 +18,15 @@ describe('VendingMachineService', function() {
 	    expect(VendingMachineService).not.toBe(null);
     }));
 
-  	it('should have an empty coin array', inject(function(VendingMachineService) {
-	    expect(VendingMachineService.coins).toBeDefined();
-	    expect(VendingMachineService.coins.length).toBe(0);
+  	it('should have no coins inserted or stored', inject(function(VendingMachineService) {
+	    expect(VendingMachineService.storedCoins).toBeDefined();
+	    expect(VendingMachineService.insertedCoins).toBeDefined();
+	    expect(VendingMachineService.storedCoins.quarters).toBe(0);
+	    expect(VendingMachineService.storedCoins.dimes).toBe(0);
+	    expect(VendingMachineService.storedCoins.nickels).toBe(0);
+	    expect(VendingMachineService.insertedCoins.quarters).toBe(0);
+	    expect(VendingMachineService.insertedCoins.dimes).toBe(0);
+	    expect(VendingMachineService.insertedCoins.nickels).toBe(0);
     }));
 
   	it('should have a stocked snack array', inject(function(VendingMachineService) {
@@ -26,43 +37,159 @@ describe('VendingMachineService', function() {
 	describe('insertCoin function', function() {
 	  	it('should store an inserted quarter', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(quarter)).toBe(true);
-		    expect(VendingMachineService.coins.length).toBe(1);
+		    expect(VendingMachineService.insertedCoins.quarters).toBe(1);
 	    }));
 
 	  	it('should store an inserted dime', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
-		    expect(VendingMachineService.coins.length).toBe(1);
+		    expect(VendingMachineService.insertedCoins.dimes).toBe(1);
 	    }));
 
 	  	it('should store an inserted nickel', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
-		    expect(VendingMachineService.coins.length).toBe(1);
+		    expect(VendingMachineService.insertedCoins.nickels).toBe(1);
 	    }));
 
 	  	it('should reject an inserted penny', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(penny)).toBe(false);
-		    expect(VendingMachineService.coins.length).toBe(0);
 	    }));
 	});
 
 	describe('dispenseSnack function', function() {
-	  	it('should dispense a cola', inject(function(VendingMachineService) {
+	  	it('should not dispense cola', inject(function(VendingMachineService) {
 		    var preCount = VendingMachineService.snacks[0].quantity;
-		    expect(VendingMachineService.dispenseSnack('cola')).toBe(true);
+		    expect(VendingMachineService.dispenseSnack('cola')).toBe(false);
+		    var postCount = VendingMachineService.snacks[0].quantity;
+		    expect(preCount - postCount).toBe(0);
+	    }));
+
+	  	it('should dispense a cola with no change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    var preCount = VendingMachineService.snacks[0].quantity;
+		    var change = VendingMachineService.dispenseSnack('cola');
+		    expect(change.quarters).toBe(0);
+		    expect(change.dimes).toBe(0);
+		    expect(change.nickels).toBe(0);
 		    var postCount = VendingMachineService.snacks[0].quantity;
 		    expect(preCount - postCount).toBe(1);
 	    }));
 
-	  	it('should dispense some chips', inject(function(VendingMachineService) {
+	    it('should dispense a cola with change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    var preCount = VendingMachineService.snacks[0].quantity;
+		    var change = VendingMachineService.dispenseSnack('cola');
+		    expect(change.quarters).toBe(1);
+		    expect(change.dimes).toBe(0);
+		    expect(change.nickels).toBe(0);
+		    var postCount = VendingMachineService.snacks[0].quantity;
+		    expect(preCount - postCount).toBe(1);
+	    }));
+
+	  	it('should not dispense chips', inject(function(VendingMachineService) {
 		    var preCount = VendingMachineService.snacks[1].quantity;
-		    expect(VendingMachineService.dispenseSnack('chips')).toBe(true);
+		    expect(VendingMachineService.dispenseSnack('chips')).toBe(false);
+		    var postCount = VendingMachineService.snacks[1].quantity;
+		    expect(preCount - postCount).toBe(0);
+	    }));
+
+	  	it('should dispense chips with no change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(nickel);
+		    var preCount = VendingMachineService.snacks[1].quantity;
+		    var change = VendingMachineService.dispenseSnack('chips');
+		    expect(change.quarters).toBe(0);
+		    expect(change.dimes).toBe(0);
+		    expect(change.nickels).toBe(0);
 		    var postCount = VendingMachineService.snacks[1].quantity;
 		    expect(preCount - postCount).toBe(1);
 	    }));
 
-	  	it('should dispense some candy', inject(function(VendingMachineService) {
+	    it('should dispense chips with change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(nickel);
+		    var preCount = VendingMachineService.snacks[1].quantity;
+		    var change = VendingMachineService.dispenseSnack('chips');
+		    expect(change.quarters).toBe(0);
+		    expect(change.dimes).toBe(1);
+		    expect(change.nickels).toBe(1);
+		    var postCount = VendingMachineService.snacks[1].quantity;
+		    expect(preCount - postCount).toBe(1);
+	    }));
+
+	  	it('should not dispense candy', inject(function(VendingMachineService) {
 		    var preCount = VendingMachineService.snacks[2].quantity;
-		    expect(VendingMachineService.dispenseSnack('candy')).toBe(true);
+		    expect(VendingMachineService.dispenseSnack('candy')).toBe(false);
+		    var postCount = VendingMachineService.snacks[2].quantity;
+		    expect(preCount - postCount).toBe(0);
+	    }));
+
+	  	it('should dispense candy with no change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(nickel);
+		    var preCount = VendingMachineService.snacks[2].quantity;
+		    var change = VendingMachineService.dispenseSnack('candy');
+		    expect(change.quarters).toBe(0);
+		    expect(change.dimes).toBe(0);
+		    expect(change.nickels).toBe(0);
+		    var postCount = VendingMachineService.snacks[2].quantity;
+		    expect(preCount - postCount).toBe(1);
+	    }));
+
+	    it('should dispense candy with change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(nickel);
+		    var preCount = VendingMachineService.snacks[2].quantity;
+		    var change = VendingMachineService.dispenseSnack('candy');
+		    expect(change.quarters).toBe(0);
+		    expect(change.dimes).toBe(1);
+		    expect(change.nickels).toBe(0);
+		    var postCount = VendingMachineService.snacks[2].quantity;
+		    expect(preCount - postCount).toBe(1);
+	    }));
+
+	    it('should dispense candy with change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(nickel);
+		    VendingMachineService.insertCoin(nickel);
+		    var preCount = VendingMachineService.snacks[2].quantity;
+		    var change = VendingMachineService.dispenseSnack('candy');
+		    expect(change.quarters).toBe(0);
+		    expect(change.dimes).toBe(1);
+		    expect(change.nickels).toBe(1);
+		    var postCount = VendingMachineService.snacks[2].quantity;
+		    expect(preCount - postCount).toBe(1);
+	    }));
+
+	    it('should dispense candy with change', inject(function(VendingMachineService) {
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(quarter);
+		    VendingMachineService.insertCoin(dime);
+		    VendingMachineService.insertCoin(nickel);
+		    VendingMachineService.insertCoin(nickel);
+		    var preCount = VendingMachineService.snacks[2].quantity;
+		    var change = VendingMachineService.dispenseSnack('candy');
+		    expect(change.quarters).toBe(0);
+		    expect(change.dimes).toBe(0);
+		    expect(change.nickels).toBe(1);
 		    var postCount = VendingMachineService.snacks[2].quantity;
 		    expect(preCount - postCount).toBe(1);
 	    }));
@@ -82,28 +209,22 @@ describe('VendingMachineService', function() {
 	  	it('should return an inserted quarter', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(quarter)).toBe(true);
 		    var returnedCoins = VendingMachineService.returnCoins();
-		    expect(returnedCoins.length).toBe(1);
-	    	expect(VendingMachineService.coins.length).toBe(0);
-		    expect(returnedCoins[0].diameter).toBe(quarter.diameter);
-		    expect(returnedCoins[0].weight).toBe(quarter.weight);
+		    expect(returnedCoins.quarters).toBe(1);
+	    	expect(VendingMachineService.insertedCoins.quarters).toBe(0);
 	    }));
 
 	  	it('should return an inserted dime', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
 		    var returnedCoins = VendingMachineService.returnCoins();
-		    expect(returnedCoins.length).toBe(1);
-	    	expect(VendingMachineService.coins.length).toBe(0);
-		    expect(returnedCoins[0].diameter).toBe(dime.diameter);
-		    expect(returnedCoins[0].weight).toBe(dime.weight);
+		    expect(returnedCoins.dimes).toBe(1);
+	    	expect(VendingMachineService.insertedCoins.dimes).toBe(0);
 	    }));
 
 	  	it('should return an inserted nickel', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
 		    var returnedCoins = VendingMachineService.returnCoins();
-		    expect(returnedCoins.length).toBe(1);
-	    	expect(VendingMachineService.coins.length).toBe(0);
-		    expect(returnedCoins[0].diameter).toBe(nickel.diameter);
-		    expect(returnedCoins[0].weight).toBe(nickel.weight);
+		    expect(returnedCoins.nickels).toBe(1);
+	    	expect(VendingMachineService.insertedCoins.nickels).toBe(0);
 	    }));
 
 	  	it('should return as many coins as were inserted', inject(function(VendingMachineService) {
@@ -113,14 +234,19 @@ describe('VendingMachineService', function() {
 		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
 		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
 		    var returnedCoins = VendingMachineService.returnCoins();
-		    expect(returnedCoins.length).toBe(5);
-	    	expect(VendingMachineService.coins.length).toBe(0);
+		    expect(returnedCoins.quarters).toBe(1);
+		    expect(returnedCoins.dimes).toBe(2);
+		    expect(returnedCoins.nickels).toBe(2);
+	    	expect(VendingMachineService.insertedCoins.quarters).toBe(0);
+	    	expect(VendingMachineService.insertedCoins.dimes).toBe(0);
+	    	expect(VendingMachineService.insertedCoins.nickels).toBe(0);
 	    }));
 
 	  	it('should return nothing if no coins were inserted', inject(function(VendingMachineService) {
-	    	expect(VendingMachineService.coins.length).toBe(0);
 		    var returnedCoins = VendingMachineService.returnCoins();
-		    expect(returnedCoins.length).toBe(0);
+		    expect(returnedCoins.quarters).toBe(0);
+		    expect(returnedCoins.dimes).toBe(0);
+		    expect(returnedCoins.nickels).toBe(0);
 	    }));
 	});
 
@@ -146,18 +272,36 @@ describe('VendingMachineService', function() {
 	    }));
 	});
 
-	describe('getCoinsTotalValue function', function() {
+	describe('getSnackPrice function', function() {
+	  	it('should return the price of cola', inject(function(VendingMachineService) {
+	    	expect(VendingMachineService.getSnackPrice('cola')).toBe(1);
+	    }));
+
+	  	it('should return the price of chips', inject(function(VendingMachineService) {
+	    	expect(VendingMachineService.getSnackPrice('chips')).toBe(.5);
+	    }));
+
+	  	it('should return the price of candy', inject(function(VendingMachineService) {
+	    	expect(VendingMachineService.getSnackPrice('candy')).toBe(.65);
+	    }));
+
+	  	it('should not report a price for a snack it does not stock', inject(function(VendingMachineService) {
+	    	expect(VendingMachineService.getSnackPrice('go gurt')).toBe(undefined);
+	    }));
+	});
+
+	describe('getInsertedCoinsTotalValue function', function() {
 	  	it('should report back 0 when there are no coins', inject(function(VendingMachineService) {
-	    	expect(VendingMachineService.getCoinsTotalValue()).toBe(0);
+	    	expect(VendingMachineService.getInsertedCoinsTotalValue()).toBe(0);
 	    }));
 
 	  	it('should add up to the correct amount when there are coins', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(quarter)).toBe(true);
-		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
+		    expect(VendingMachineService.insertCoin(quarter)).toBe(true);
 		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
-		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
 		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
-	    	expect(VendingMachineService.getCoinsTotalValue()).toBe(.55);
+		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
+	    	expect(VendingMachineService.getInsertedCoinsTotalValue()).toBe(.75);
 	    }));
 	});
 
@@ -167,12 +311,30 @@ describe('VendingMachineService', function() {
 	    }));
 
 	  	it('should return false when there are enough coins', inject(function(VendingMachineService) {
-		    expect(VendingMachineService.insertCoin(quarter)).toBe(true);
-		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
-		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
-		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
-		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
+		    VendingMachineService.storedCoins = {
+				quarters : 0,
+				dimes : 1,
+				nickels : 1
+			};
 	    	expect(VendingMachineService.needsExactChange()).toBe(false);
+	    }));
+
+	  	it('should return true when there are no dimes', inject(function(VendingMachineService) {
+		    VendingMachineService.storedCoins = {
+				quarters : 1,
+				dimes : 0,
+				nickels : 1
+			};
+	    	expect(VendingMachineService.needsExactChange()).toBe(true);
+	    }));
+
+	  	it('should return true when there are no nickels', inject(function(VendingMachineService) {
+		    VendingMachineService.storedCoins = {
+				quarters : 1,
+				dimes : 1,
+				nickels : 0
+			};
+	    	expect(VendingMachineService.needsExactChange()).toBe(true);
 	    }));
 	});
 
