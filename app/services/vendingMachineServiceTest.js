@@ -31,17 +31,17 @@ describe('VendingMachineService', function() {
 
 	  	it('should store an inserted dime', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
-		    expect(VendingMachineService.coins.length).toBe(2);
+		    expect(VendingMachineService.coins.length).toBe(1);
 	    }));
 
 	  	it('should store an inserted nickel', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
-		    expect(VendingMachineService.coins.length).toBe(3);
+		    expect(VendingMachineService.coins.length).toBe(1);
 	    }));
 
 	  	it('should reject an inserted penny', inject(function(VendingMachineService) {
 		    expect(VendingMachineService.insertCoin(penny)).toBe(false);
-		    expect(VendingMachineService.coins.length).toBe(3);
+		    expect(VendingMachineService.coins.length).toBe(0);
 	    }));
 	});
 

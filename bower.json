@@ -13,6 +13,7 @@
     "angular-animate": "latest",
     "angular-aria": "latest",
     "html5-boilerplate": "~5.2.0",
-    "angular-material": "~1.0.4"
+    "angular-material": "~1.0.4",
+    "underscore": "latest"
   }
 }
