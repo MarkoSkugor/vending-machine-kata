@@ -18,7 +18,6 @@ services.factory('VendingMachineService', ['$rootScope', function($rootScope){
 				quantity : 3
 			}
 		],
-		needsExactChange : true,
 		insertCoin : function(coin){
 
 		},
@@ -35,6 +34,9 @@ services.factory('VendingMachineService', ['$rootScope', function($rootScope){
 		},
 		getCoinsTotalValue : function(){
 
+		},
+		needsExactChange : function(){
+			
 		}
 	};
 

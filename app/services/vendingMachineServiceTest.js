@@ -146,4 +146,34 @@ describe('VendingMachineService', function() {
 	    }));
 	});
 
+	describe('getCoinsTotalValue function', function() {
+	  	it('should report back 0 when there are no coins', inject(function(VendingMachineService) {
+	    	expect(VendingMachineService.getCoinsTotalValue()).toBe(0);
+	    }));
+
+	  	it('should add up to the correct amount when there are coins', inject(function(VendingMachineService) {
+		    expect(VendingMachineService.insertCoin(quarter)).toBe(true);
+		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
+		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
+		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
+		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
+	    	expect(VendingMachineService.getCoinsTotalValue()).toBe(.55);
+	    }));
+	});
+
+	describe('needsExactChange function', function() {
+	  	it('should return true when there are no coins', inject(function(VendingMachineService) {
+	    	expect(VendingMachineService.needsExactChange()).toBe(true);
+	    }));
+
+	  	it('should return false when there are enough coins', inject(function(VendingMachineService) {
+		    expect(VendingMachineService.insertCoin(quarter)).toBe(true);
+		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
+		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
+		    expect(VendingMachineService.insertCoin(nickel)).toBe(true);
+		    expect(VendingMachineService.insertCoin(dime)).toBe(true);
+	    	expect(VendingMachineService.needsExactChange()).toBe(false);
+	    }));
+	});
+
 });
