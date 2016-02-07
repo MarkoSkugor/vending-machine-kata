@@ -50,14 +50,22 @@ services.factory('VendingMachineService', ['$rootScope', function($rootScope){
 			var snackToDispense = _.find(this.snacks, function(snack){
 				return snack.name == snackName;
 			});
-			if(snackToDispense && snackToDispense.quantity > 0
-				&& this.getInsertedCoinsTotalValue() >= snackToDispense.price){
+
+			var result = {};
+
+			if(snackToDispense == undefined || snackToDispense.quantity == 0){
+				result.error = true;
+				result.message = "SOLD OUT";
+			} else if(this.getInsertedCoinsTotalValue() < snackToDispense.price) {
+				result.error = true;
+				result.message = "PRICE: $" + snackToDispense.price.toFixed(2);
+			} else {
 				var change = this.processPayment(snackToDispense.price);
 				snackToDispense.quantity--;
-				return change;
-			} else {
-				return false;
+				result.message = "THANK YOU";
+				result.change = change;
 			}
+			return result;
 		},
 		processPayment : function(price){
 			var totalInserted = this.getInsertedCoinsTotalValue();

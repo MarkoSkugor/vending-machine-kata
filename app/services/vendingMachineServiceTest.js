@@ -58,7 +58,7 @@ describe('VendingMachineService', function() {
 	describe('dispenseSnack function', function() {
 	  	it('should not dispense cola', inject(function(VendingMachineService) {
 		    var preCount = VendingMachineService.snacks[0].quantity;
-		    expect(VendingMachineService.dispenseSnack('cola')).toBe(false);
+		    expect(VendingMachineService.dispenseSnack('cola').error).toBe(true);
 		    var postCount = VendingMachineService.snacks[0].quantity;
 		    expect(preCount - postCount).toBe(0);
 	    }));
@@ -69,7 +69,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(quarter);
 		    VendingMachineService.insertCoin(quarter);
 		    var preCount = VendingMachineService.snacks[0].quantity;
-		    var change = VendingMachineService.dispenseSnack('cola');
+		    var change = VendingMachineService.dispenseSnack('cola').change;
 		    expect(change.quarters).toBe(0);
 		    expect(change.dimes).toBe(0);
 		    expect(change.nickels).toBe(0);
@@ -84,7 +84,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(quarter);
 		    VendingMachineService.insertCoin(quarter);
 		    var preCount = VendingMachineService.snacks[0].quantity;
-		    var change = VendingMachineService.dispenseSnack('cola');
+		    var change = VendingMachineService.dispenseSnack('cola').change;
 		    expect(change.quarters).toBe(1);
 		    expect(change.dimes).toBe(0);
 		    expect(change.nickels).toBe(0);
@@ -94,7 +94,7 @@ describe('VendingMachineService', function() {
 
 	  	it('should not dispense chips', inject(function(VendingMachineService) {
 		    var preCount = VendingMachineService.snacks[1].quantity;
-		    expect(VendingMachineService.dispenseSnack('chips')).toBe(false);
+		    expect(VendingMachineService.dispenseSnack('chips').error).toBe(true);
 		    var postCount = VendingMachineService.snacks[1].quantity;
 		    expect(preCount - postCount).toBe(0);
 	    }));
@@ -105,7 +105,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(dime);
 		    VendingMachineService.insertCoin(nickel);
 		    var preCount = VendingMachineService.snacks[1].quantity;
-		    var change = VendingMachineService.dispenseSnack('chips');
+		    var change = VendingMachineService.dispenseSnack('chips').change;
 		    expect(change.quarters).toBe(0);
 		    expect(change.dimes).toBe(0);
 		    expect(change.nickels).toBe(0);
@@ -119,7 +119,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(quarter);
 		    VendingMachineService.insertCoin(nickel);
 		    var preCount = VendingMachineService.snacks[1].quantity;
-		    var change = VendingMachineService.dispenseSnack('chips');
+		    var change = VendingMachineService.dispenseSnack('chips').change;
 		    expect(change.quarters).toBe(0);
 		    expect(change.dimes).toBe(1);
 		    expect(change.nickels).toBe(1);
@@ -129,7 +129,7 @@ describe('VendingMachineService', function() {
 
 	  	it('should not dispense candy', inject(function(VendingMachineService) {
 		    var preCount = VendingMachineService.snacks[2].quantity;
-		    expect(VendingMachineService.dispenseSnack('candy')).toBe(false);
+		    expect(VendingMachineService.dispenseSnack('candy').error).toBe(true);
 		    var postCount = VendingMachineService.snacks[2].quantity;
 		    expect(preCount - postCount).toBe(0);
 	    }));
@@ -140,7 +140,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(dime);
 		    VendingMachineService.insertCoin(nickel);
 		    var preCount = VendingMachineService.snacks[2].quantity;
-		    var change = VendingMachineService.dispenseSnack('candy');
+		    var change = VendingMachineService.dispenseSnack('candy').change;
 		    expect(change.quarters).toBe(0);
 		    expect(change.dimes).toBe(0);
 		    expect(change.nickels).toBe(0);
@@ -155,7 +155,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(dime);
 		    VendingMachineService.insertCoin(nickel);
 		    var preCount = VendingMachineService.snacks[2].quantity;
-		    var change = VendingMachineService.dispenseSnack('candy');
+		    var change = VendingMachineService.dispenseSnack('candy').change;
 		    expect(change.quarters).toBe(0);
 		    expect(change.dimes).toBe(1);
 		    expect(change.nickels).toBe(0);
@@ -171,7 +171,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(nickel);
 		    VendingMachineService.insertCoin(nickel);
 		    var preCount = VendingMachineService.snacks[2].quantity;
-		    var change = VendingMachineService.dispenseSnack('candy');
+		    var change = VendingMachineService.dispenseSnack('candy').change;
 		    expect(change.quarters).toBe(0);
 		    expect(change.dimes).toBe(1);
 		    expect(change.nickels).toBe(1);
@@ -186,7 +186,7 @@ describe('VendingMachineService', function() {
 		    VendingMachineService.insertCoin(nickel);
 		    VendingMachineService.insertCoin(nickel);
 		    var preCount = VendingMachineService.snacks[2].quantity;
-		    var change = VendingMachineService.dispenseSnack('candy');
+		    var change = VendingMachineService.dispenseSnack('candy').change;
 		    expect(change.quarters).toBe(0);
 		    expect(change.dimes).toBe(0);
 		    expect(change.nickels).toBe(1);
@@ -196,12 +196,12 @@ describe('VendingMachineService', function() {
 
 	  	it('should not dispense a sold out snack', inject(function(VendingMachineService) {
 		    VendingMachineService.snacks[0].quantity = 0;
-		    expect(VendingMachineService.dispenseSnack('cola')).toBe(false);
+		    expect(VendingMachineService.dispenseSnack('cola').error).toBe(true);
 	    }));
 
 	  	it('should not dispense a snack it does not stock', inject(function(VendingMachineService) {
 		    VendingMachineService.snacks[0].quantity = 0;
-		    expect(VendingMachineService.dispenseSnack('gefilte fish')).toBe(false);
+		    expect(VendingMachineService.dispenseSnack('gefilte fish').error).toBe(true);
 	    }));
 	});
 
