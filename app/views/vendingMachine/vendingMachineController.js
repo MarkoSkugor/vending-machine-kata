@@ -7,7 +7,7 @@ angular.module('myApp.vendingmachine', ['ngRoute'])
   });
 }])
 
-.controller('vendingMachineController', ['$scope', 'VendingMachineService', function($scope, VendingMachineService) {
+.controller('vendingMachineController', ['$scope', '$timeout','VendingMachineService', function($scope, $timeout, VendingMachineService) {
 	$scope.screenMessage = 'EXACT CHANGE ONLY';
 	$scope.snackImage = '';
 	var imagePaths = {
@@ -65,6 +65,14 @@ angular.module('myApp.vendingmachine', ['ngRoute'])
 			$scope.coinReturn.nickels += result.change.nickels;
 		}
 
+		var resetMessage = $scope.screenMessage;
 		$scope.screenMessage = result.message;
+
+		$timeout(function() {
+			if(!result.error){
+				resetMessage = VendingMachineService.needsExactChange() ? 'EXACT CHANGE ONLY' : 'INSERT COIN';
+			}
+			$scope.screenMessage = resetMessage;
+	    }, 1000);
 	};
 }]);
